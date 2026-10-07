@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+
+<meta name="theme-color" content="#f4f8fd">
+
+<meta name="robots" content="index,follow">
+
+<title>METEO MEMBER</title>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs\@1.0.0/qrcode.min.js"></script>
+
+<style>
+
+:root{--navy:#09234a;--blue:#0874ed;--bg:#f4f8fd;--gray:#687b92;--line:#dce7f3;--green:#159447;--orange:#ffad18;--purple:#7437d2;--nav-h:88px}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+html,body{min-height:100%}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--bg);color:var(--navy)}
+
+button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:active{transform:scale(.98)}a{color:inherit}.app{width:100%;max-width:520px;margin:auto;min-height:100vh}
+
+#loginScreen{min-height:100vh;padding:calc(55px + env(safe-area-inset-top)) 22px 40px;display:flex;align-items:center;justify-content:center}
+
+.login-card{width:100%;background:#fff;border-radius:34px;padding:42px 28px 36px;text-align:center;box-shadow:0 20px 60px rgba(20,60,100,.08)}
+
+.login-logo{width:82%;max-width:340px;margin-bottom:26px}.tagline{font-size:17px;font-weight:800;margin-bottom:38px}
+
+.login-input{width:100%;height:68px;border:2px solid #d6e0ec;border-radius:18px;padding:0 20px;font-size:18px;font-weight:700;margin-bottom:16px;outline:none}
+
+.login-btn{width:100%;height:68px;border:0;border-radius:18px;background:linear-gradient(135deg,#126dd6,#0874ed);color:#fff;font-size:22px;font-weight:900}
+
+.login-help{margin-top:18px;color:var(--gray);font-size:13px;line-height:1.7;font-weight:700}
+
+#appScreen{display:none;padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 18px)}
+
+.top-area{background:#fff;padding:calc(22px + env(safe-area-inset-top)) 22px 18px}.brand{text-align:center}.brand img{width:210px;max-height:72px;object-fit:contain}.brand-tagline{text-align:center;font-size:13px;font-weight:900;margin-top:4px}
+
+.page-wrap{padding:24px 20px}.page{display:none}.page.active{display:block}.page-title{font-size:35px;font-weight:950;margin-bottom:14px}.page-description{color:#60738a;font-size:16px;line-height:1.65;font-weight:800;margin-bottom:25px}
+
+.hello{font-size:19px;font-weight:900}.member-name{font-size:36px;font-weight:950;margin:5px 0 25px}.member-name small{font-size:17px}
+
+.status-row{display:grid;grid-template-columns:auto 1fr;gap:12px;margin-bottom:18px}.type-pill,.expiration-pill{min-height:55px;border-radius:28px;display:flex;align-items:center;justify-content:center;font-weight:950}.type-pill{padding:0 20px;background:linear-gradient(135deg,#ffbd32,#ffa509);color:#fff}.expiration-pill{background:#fff;gap:10px;padding:0 15px}.expiration-pill strong{color:var(--green);font-size:19px}
+
+.point-card{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(135deg,#0757b6,#1475dc);color:#fff;padding:30px 28px;min-height:190px;box-shadow:0 15px 35px rgba(15,90,180,.18);margin-bottom:20px}.point-label{font-size:19px;font-weight:900}.point-value{margin-top:10px;font-size:66px;line-height:1;font-weight:950}.point-value span{font-size:25px}
+
+.home-news{display:none;margin-bottom:20px}.home-news.show{display:block}.home-news-title{font-size:18px;font-weight:950;margin-bottom:10px}.home-news-card{width:100%;border:0;text-align:left;background:#fff;border-radius:20px;padding:17px 18px;box-shadow:0 8px 25px rgba(20,50,80,.05)}.home-news-date{color:var(--gray);font-size:12px;font-weight:800}.home-news-subject{font-size:16px;font-weight:950;margin-top:5px}.home-news-more{color:var(--blue);font-size:12px;font-weight:900;margin-top:8px}
+
+.home-shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.shortcut{border:0;background:#fff;border-radius:21px;min-height:142px;padding:17px 5px 12px;color:var(--navy);box-shadow:0 8px 25px rgba(20,50,80,.05)}.shortcut-icon{font-size:34px;height:48px}.shortcut-title{font-size:14px;font-weight:950;margin-top:7px}.shortcut-sub{color:var(--gray);font-size:10px;font-weight:800;margin-top:6px}
+
+.member-card,.detail-card,.legal-card,.about-card{background:#fff;border-radius:26px;padding:24px;box-shadow:0 8px 28px rgba(20,50,80,.06)}.member-card{text-align:center}.card-type{display:inline-block;background:#ffad18;color:#fff;border-radius:25px;padding:11px 28px;font-size:18px;font-weight:950;margin-bottom:24px}.qr-shell{background:#fff;border-radius:30px;padding:25px;display:flex;justify-content:center}.card-number-label{margin-top:18px;color:var(--gray);font-weight:900}.card-number{color:var(--blue);font-size:35px;font-weight:950}.card-name{font-size:25px;font-weight:950;margin-top:12px}.card-exp{background:#eef6ff;border-radius:18px;padding:16px;display:flex;justify-content:space-between;margin-top:22px;font-weight:900}.card-exp strong{color:var(--green)}
+
+.empty-card{background:#fff;border-radius:24px;padding:28px 22px;text-align:center;color:#60738a;font-weight:900}.news-card{background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 8px 25px rgba(20,50,80,.05);margin-bottom:16px}.news-head{background:#eff7ff;padding:20px;border-bottom:1px solid #dbeaf9}.news-badge{display:inline-block;border-radius:20px;background:#e6f3ff;color:var(--blue);padding:7px 13px;font-size:13px;font-weight:900}.news-date{color:#6b8097;font-size:14px;font-weight:900;margin-top:14px}.news-title{font-size:21px;font-weight:950;line-height:1.45;margin-top:10px}.news-body{padding:20px;color:#23364b;font-size:15px;line-height:1.8;font-weight:700;white-space:pre-wrap}.event-card .news-head{background:#fff7e8}.event-card .news-badge{background:#fff0d2;color:#b96700}
+
+.menu-list{display:flex;flex-direction:column;gap:15px}.menu-item{width:100%;border:0;background:#fff;border-radius:22px;padding:20px;display:flex;align-items:center;gap:16px;text-align:left;color:var(--navy)}.menu-icon{width:55px;height:55px;border-radius:50%;background:#eaf4ff;color:#096ad5;display:flex;align-items:center;justify-content:center;font-size:26px}.menu-text{flex:1}.menu-title{font-size:18px;font-weight:950}.menu-sub{color:var(--gray);font-size:13px;font-weight:800;margin-top:4px}.menu-arrow{color:#91a4b8;font-size:30px}.member-info{margin-top:20px;background:#fff;border-radius:22px;padding:20px}.info-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line)}.info-row:last-child{border:0}.info-label{color:var(--gray);font-size:13px;font-weight:800}.info-value{font-size:14px;font-weight:950}.logout{width:100%;margin-top:18px;border:2px solid #d9e4ef;background:#fff;color:#64778c;border-radius:17px;padding:16px;font-weight:900}
+
+.detail-back{width:52px;height:52px;border:0;border-radius:17px;background:#fff;color:var(--blue);font-size:28px;margin-bottom:22px}.legal-card h3{font-size:18px;margin:24px 0 10px}.legal-card h3:first-child{margin-top:0}.legal-card p{color:#183557;font-size:15px;line-height:2;font-weight:700}.about-card{text-align:center}.about-logo{width:220px;max-width:82%;margin-bottom:26px}.about-card p{color:var(--gray);line-height:1.9;font-weight:700}.contact-button{width:100%;min-height:58px;margin-top:14px;border-radius:17px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-weight:950}.contact-button.primary{background:var(--blue);color:#fff}.contact-button.secondary{background:#fff;border:1px solid var(--line)}
+
+.bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:100%;max-width:520px;height:calc(var(--nav-h) + env(safe-area-inset-bottom));padding:9px 5px env(safe-area-inset-bottom);background:rgba(255,255,255,.97);border-top:1px solid #dce6f0;display:grid;grid-template-columns:repeat(5,1fr);z-index:100}.nav-btn{border:0;background:transparent;color:#687b91;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}.nav-btn.active{color:var(--blue)}.nav-icon{font-size:24px}.nav-text{font-size:11px;font-weight:950}
+
+.exp-alert{background:#fff3df;border:1px solid #ffd997;color:#915700;border-radius:18px;padding:14px 16px;margin-bottom:16px;font-size:13px;font-weight:850;line-height:1.6}.exp-alert.danger{background:#fff0f0;border-color:#ffcaca;color:#a12020}
+
+#loading{position:fixed;inset:0;z-index:999;background:rgba(244,248,253,.92);display:none;align-items:center;justify-content:center;flex-direction:column;gap:15px}#loading.show{display:flex}.spinner{width:45px;height:45px;border-radius:50%;border:5px solid #dce8f4;border-top-color:var(--blue);animation:spin .75s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.loading-text{color:var(--gray);font-weight:900}
+
+@media(max-width:390px){.page-wrap{padding-left:16px;padding-right:16px}.member-name{font-size:31px}.point-value{font-size:57px}.status-row{grid-template-columns:1fr}.shortcut-title{font-size:12px}}
+
+</style>
+
+
+
+<style>
+
+/* ===== 読みやすさ改善：文字を全体的に大きく ===== */
+
+body{font-size:17px}
+
+.brand-tagline{font-size:15px}
+
+.hello{font-size:22px}
+
+.member-name{font-size:39px}
+
+.member-name small{font-size:19px}
+
+.type-pill{font-size:19px}
+
+.expiration-pill{font-size:17px}
+
+.expiration-pill strong{font-size:21px}
+
+.point-label{font-size:21px}
+
+.point-value{font-size:70px}
+
+.point-value span{font-size:27px}
+
+.home-news-title{font-size:21px}
+
+.home-news-date{font-size:14px}
+
+.home-news-subject{font-size:18px;line-height:1.5}
+
+.home-news-more{font-size:14px}
+
+.shortcut-title{font-size:15px}
+
+.shortcut-sub{font-size:11px;line-height:1.45}
+
+.page-title{font-size:38px}
+
+.page-description{font-size:18px}
+
+.news-badge{font-size:15px}
+
+.news-date{font-size:16px}
+
+.news-title{font-size:23px}
+
+.news-body{font-size:17px;line-height:1.9}
+
+.empty-card{font-size:18px;line-height:1.7}
+
+.menu-title{font-size:20px}
+
+.menu-sub{font-size:15px}
+
+.info-label{font-size:15px}
+
+.info-value{font-size:16px}
+
+.nav-text{font-size:13px}
+
+.nav-icon{font-size:27px}
+
+.card-number-label{font-size:16px}
+
+.card-number{font-size:38px}
+
+.card-name{font-size:27px}
+
+.legal-card p{font-size:17px}
+
+@media(max-width:390px){
+
+  .member-name{font-size:34px}
+
+  .point-value{font-size:62px}
+
+  .shortcut-title{font-size:14px}
+
+  .shortcut-sub{font-size:10px}
+
+  .nav-text{font-size:12px}
+
+}
+
+</style>
+
+
+
+
+
+<style>
+
+/* ===== METEO 読みやすさ強化版 ===== */
+
+body{font-size:19px}
+
+.login-help{font-size:16px;line-height:1.8}
+
+.brand-tagline{font-size:17px}
+
+.hello{font-size:24px}
+
+.member-name{font-size:42px}
+
+.member-name small{font-size:21px}
+
+.type-pill{font-size:21px}
+
+.expiration-pill{font-size:19px}
+
+.expiration-pill strong{font-size:23px}
+
+.point-label{font-size:23px}
+
+.point-value{font-size:74px}
+
+.point-value span{font-size:30px}
+
+.home-news-title{font-size:23px;margin-bottom:12px}
+
+.home-news-date{font-size:16px}
+
+.home-news-subject{font-size:20px;line-height:1.55}
+
+.home-news-more{font-size:16px;margin-top:10px}
+
+.home-event-card{border-left:5px solid var(--orange)}
+
+.shortcut{min-height:154px;padding:18px 5px 14px}
+
+.shortcut-icon{font-size:38px;height:52px}
+
+.shortcut-title{font-size:17px}
+
+.shortcut-sub{font-size:14px;line-height:1.45}
+
+.page-title{font-size:40px}
+
+.page-description{font-size:19px}
+
+.news-badge{font-size:17px}
+
+.news-date{font-size:17px}
+
+.news-title{font-size:25px}
+
+.news-body{font-size:19px;line-height:1.9}
+
+.empty-card{font-size:19px}
+
+.menu-title{font-size:21px}
+
+.menu-sub{font-size:16px}
+
+.info-label{font-size:17px}
+
+.info-value{font-size:18px}
+
+.logout{font-size:18px}
+
+.nav-icon{font-size:29px}
+
+.nav-text{font-size:15px}
+
+.card-number-label{font-size:18px}
+
+.card-number{font-size:40px}
+
+.card-name{font-size:29px}
+
+.card-exp{font-size:18px}
+
+.legal-card h3{font-size:21px}
+
+.legal-card p{font-size:18px}
+
+.about-card p{font-size:18px}
+
+.contact-button{font-size:18px}
+
+.exp-alert{font-size:16px}
+
+.loading-text{font-size:16px}
+
+@media(max-width:390px){
+
+  body{font-size:18px}
+
+  .member-name{font-size:36px}
+
+  .member-name small{font-size:19px}
+
+  .point-value{font-size:65px}
+
+  .shortcut-title{font-size:16px}
+
+  .shortcut-sub{font-size:13px}
+
+  .nav-text{font-size:14px}
+
+}
+
+</style>
+
+
+
+
+
+<style>
+
+/* ===== スマホ可読性調整 =====
+
+   氏名・ポイント・各ページ見出しのサイズは変更しません。
+
+   それ以外の文字を大きくしています。
+
+*/
+
+body{font-size:20px}
+
+
+
+/* ログイン */
+
+.tagline{font-size:19px}
+
+.login-input{font-size:20px}
+
+.login-btn{font-size:22px}
+
+.login-help{font-size:17px;line-height:1.8}
+
+
+
+/* ヘッダー */
+
+.brand-tagline{font-size:17px}
+
+
+
+/* ホーム：氏名とポイントは変更しない */
+
+.hello{font-size:22px}
+
+.member-name small{font-size:21px}
+
+.type-pill{font-size:21px}
+
+.expiration-pill{font-size:20px}
+
+.expiration-pill strong{font-size:22px}
+
+.point-label{font-size:22px}
+
+.point-value span{font-size:29px}
+
+
+
+/* トップのお知らせ・イベント */
+
+.home-news-title{font-size:22px}
+
+.home-news-date{font-size:17px}
+
+.home-news-subject{font-size:21px;line-height:1.55}
+
+.home-news-more{font-size:17px}
+
+
+
+/* 4つのショートカット */
+
+.shortcut{min-height:165px;padding:20px 5px 16px}
+
+.shortcut-title{font-size:18px}
+
+.shortcut-sub{font-size:16px;line-height:1.45}
+
+
+
+/* ページ見出し .page-title は変更しない */
+
+.page-description{font-size:20px;line-height:1.7}
+
+
+
+/* お知らせ・イベント */
+
+.news-badge{font-size:17px}
+
+.news-date{font-size:18px}
+
+.news-title{font-size:23px}
+
+.news-body{font-size:20px;line-height:1.9}
+
+.empty-card{font-size:20px;line-height:1.7}
+
+
+
+/* 会員証 */
+
+.card-type{font-size:20px}
+
+.card-number-label{font-size:18px}
+
+.card-number{font-size:38px}
+
+.card-name{font-size:27px}
+
+.card-exp{font-size:19px}
+
+.card-exp strong{font-size:21px}
+
+
+
+/* メニュー */
+
+.menu-title{font-size:21px}
+
+.menu-sub{font-size:17px;line-height:1.5}
+
+.info-label{font-size:17px}
+
+.info-value{font-size:18px}
+
+.logout{font-size:19px}
+
+
+
+/* お問い合わせ・規約等 */
+
+.detail-card{font-size:19px}
+
+.legal-card h3{font-size:21px}
+
+.legal-card p{font-size:19px;line-height:2}
+
+.about-card h2{font-size:22px}
+
+.about-card p{font-size:19px;line-height:1.9}
+
+.contact-button{font-size:19px}
+
+
+
+/* 警告・ローディング */
+
+.exp-alert{font-size:17px;line-height:1.7}
+
+.loading-text{font-size:17px}
+
+
+
+/* 下部ナビ */
+
+.nav-text{font-size:15px}
+
+.nav-icon{font-size:29px}
+
+
+
+/* 小さいスマホでも文字を縮めない */
+
+@media(max-width:390px){
+
+  body{font-size:20px}
+
+  .shortcut-title{font-size:18px}
+
+  .shortcut-sub{font-size:15px}
+
+  .nav-text{font-size:15px}
+
+  .menu-sub{font-size:17px}
+
+  .info-label{font-size:17px}
+
+  .info-value{font-size:18px}
+
+  .news-date{font-size:18px}
+
+  .home-news-date{font-size:17px}
+
+}
+
+</style>
+
+
+
+
+
+<style>
+
+/* ===== さらに1.5倍：補助文字・本文・ナビ等 =====
+
+   氏名・ポイント数値・各ページ大見出しは現状維持
+
+*/
+
+.tagline{font-size:28px}
+
+.login-input{font-size:30px}
+
+.login-btn{font-size:33px}
+
+.login-help{font-size:25px;line-height:1.65}
+
+.brand-tagline{font-size:25px}
+
+
+
+.hello{font-size:33px}
+
+.member-name small{font-size:31px}
+
+.type-pill{font-size:31px}
+
+.expiration-pill{font-size:30px;line-height:1.35}
+
+.expiration-pill strong{font-size:33px}
+
+.point-label{font-size:33px}
+
+.point-value span{font-size:43px}
+
+
+
+.home-news-title{font-size:33px}
+
+.home-news-date{font-size:25px}
+
+.home-news-subject{font-size:31px;line-height:1.45}
+
+.home-news-more{font-size:25px}
+
+
+
+.shortcut{min-height:195px;padding:22px 5px 18px}
+
+.shortcut-title{font-size:27px;line-height:1.25}
+
+.shortcut-sub{font-size:24px;line-height:1.35}
+
+
+
+.page-description{font-size:30px;line-height:1.55}
+
+.news-badge{font-size:25px}
+
+.news-date{font-size:27px}
+
+.news-title{font-size:34px;line-height:1.45}
+
+.news-body{font-size:30px;line-height:1.7}
+
+.empty-card{font-size:30px;line-height:1.55}
+
+
+
+.card-type{font-size:30px}
+
+.card-number-label{font-size:27px}
+
+.card-number{font-size:38px}
+
+.card-name{font-size:27px}
+
+.card-exp{font-size:28px}
+
+.card-exp strong{font-size:31px}
+
+
+
+.menu-title{font-size:31px}
+
+.menu-sub{font-size:25px;line-height:1.4}
+
+.info-label{font-size:25px}
+
+.info-value{font-size:27px}
+
+.logout{font-size:28px}
+
+
+
+.detail-card{font-size:28px;line-height:1.7}
+
+.legal-card h3{font-size:31px}
+
+.legal-card p{font-size:28px;line-height:1.8}
+
+.about-card h2{font-size:33px}
+
+.about-card p{font-size:28px;line-height:1.7}
+
+.contact-button{font-size:28px}
+
+
+
+.exp-alert{font-size:25px;line-height:1.55}
+
+.loading-text{font-size:25px}
+
+
+
+.nav-text{font-size:22px;line-height:1.2}
+
+.nav-icon{font-size:34px}
+
+.bottom-nav{--nav-h:105px}
+
+
+
+@media(max-width:390px){
+
+  .tagline{font-size:26px}
+
+  .brand-tagline{font-size:23px}
+
+  .shortcut-title{font-size:24px}
+
+  .shortcut-sub{font-size:21px}
+
+  .nav-text{font-size:20px}
+
+  .menu-title{font-size:28px}
+
+  .menu-sub{font-size:23px}
+
+  .info-label{font-size:23px}
+
+  .info-value{font-size:25px}
+
+  .news-date{font-size:24px}
+
+  .news-body{font-size:27px}
+
+  .home-news-date{font-size:23px}
+
+  .home-news-subject{font-size:28px}
+
+  .page-description{font-size:27px}
+
+}
+
+</style>
+
+
+
+
+
+<style>
+
+/* ===== 折り返し防止調整 =====
+
+   大きな文字は維持しつつ、短いラベル類は1行表示
+
+*/
+
+.type-pill,
+
+.expiration-pill,
+
+.shortcut-title,
+
+.shortcut-sub,
+
+.home-news-title,
+
+.home-news-date,
+
+.home-news-more,
+
+.news-badge,
+
+.news-date,
+
+.menu-title,
+
+.menu-sub,
+
+.info-label,
+
+.info-value,
+
+.logout,
+
+.nav-text,
+
+.card-number-label,
+
+.card-exp,
+
+.contact-button {
+
+  white-space: nowrap;
+
+}
+
+
+
+/* 4ボタンは横幅不足を避けるため補助文を非表示 */
+
+.shortcut-sub{
+
+  display:none;
+
+}
+
+.shortcut{
+
+  min-height:135px;
+
+  padding:18px 3px 14px;
+
+}
+
+.shortcut-title{
+
+  font-size:20px;
+
+  white-space:nowrap;
+
+}
+
+
+
+/* 下部ナビは1行維持 */
+
+.nav-text{
+
+  font-size:17px;
+
+  white-space:nowrap;
+
+}
+
+.bottom-nav{
+
+  --nav-h:96px;
+
+}
+
+
+
+/* 会員種別・期限 */
+
+.status-row{
+
+  grid-template-columns:auto minmax(0,1fr);
+
+}
+
+.type-pill{
+
+  font-size:22px;
+
+  padding-left:16px;
+
+  padding-right:16px;
+
+}
+
+.expiration-pill{
+
+  font-size:18px;
+
+  gap:6px;
+
+  padding-left:10px;
+
+  padding-right:10px;
+
+}
+
+.expiration-pill strong{
+
+  font-size:21px;
+
+}
+
+
+
+/* メニューはタイトルを優先して1行表示 */
+
+.menu-title{font-size:23px}
+
+.menu-sub{font-size:18px}
+
+
+
+/* 本文系は自然な折り返しを残す */
+
+.page-description,
+
+.news-title,
+
+.news-body,
+
+.legal-card p,
+
+.about-card p,
+
+.detail-card{
+
+  white-space:normal;
+
+  overflow-wrap:break-word;
+
+}
+
+
+
+/* 小さいスマホでもラベルを折り返さない */
+
+@media(max-width:390px){
+
+  .shortcut-title{font-size:18px}
+
+  .nav-text{font-size:15px}
+
+  .type-pill{font-size:20px}
+
+  .expiration-pill{font-size:16px}
+
+  .expiration-pill strong{font-size:19px}
+
+  .menu-title{font-size:21px}
+
+  .menu-sub{font-size:16px}
+
+}
+
+</style>
+
+
+
+
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="METEO">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<section id="loginScreen"><div class="login-card"><img src="logo.png" class="login-logo" alt="METEO"><div class="tagline">あなたのゴルフライフを、もっと楽しく。</div><input id="loginId" class="login-input" type="text" autocomplete="username" placeholder="会員ID"><button class="login-btn" onclick="login()">ログイン</button><div class="login-help">会員IDを入力してください。<br>初回ログイン後は、この端末にログイン情報を保存します。</div></div></section>
+
+<div id="appScreen">
+
+<header class="top-area"><div class="brand"><img src="logo.png" alt="METEO"></div><div class="brand-tagline">あなたのゴルフライフを、もっと楽しく。</div></header>
+
+<main class="page-wrap">
+
+<section id="homePage" class="page active">
+
+<div class="hello">こんにちは！</div><div class="member-name"><span id="homeName">-</span><small> 様</small></div><div id="expirationAlert"></div>
+
+<div class="status-row"><div id="homeType" class="type-pill">-</div><div class="expiration-pill">有効期限 <strong id="homeExpiration">-</strong></div></div>
+
+<div class="point-card"><div class="point-label">現在ポイント</div><div class="point-value"><b id="homePoints">0</b><span>pt</span></div></div>
+
+<div id="homeNews" class="home-news"><div class="home-news-title">📢 お知らせ</div><div id="homeNewsList"></div></div>
+
+<div id="homeEvents" class="home-news"><div class="home-news-title">📅 イベント</div><div id="homeEventList"></div></div>
+
+<div class="home-shortcuts">
+
+<button class="shortcut" onclick="showPage('cardPage')"><div class="shortcut-icon blue">
+
+<svg viewBox="0 0 24 24" aria-hidden="true" style="width:40px;height:40px;fill:currentColor">
+
+  <path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h13A2.5 2.5 0 0 1 21 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 18.5v-13zm2 1V18h14V6H5zm2 2h4v5H7v-5zm6 0h4v2h-4v-2zm0 4h4v2h-4v-2z"/>
+
+</svg>
+
+</div><div class="shortcut-title">QR会員証</div><div class="shortcut-sub">受付で提示</div></button>
+
+<button class="shortcut" onclick="showPage('eventPage')"><div class="shortcut-icon">📅</div><div class="shortcut-title">イベント</div><div class="shortcut-sub">開催予定を確認</div></button>
+
+<button class="shortcut" onclick="showPage('newsPage')"><div class="shortcut-icon">📣</div><div class="shortcut-title">お知らせ</div><div class="shortcut-sub">最新情報を確認</div></button>
+
+<button class="shortcut" onclick="showPage('menuPage')"><div class="shortcut-icon">⚙</div><div class="shortcut-title">メニュー</div><div class="shortcut-sub">各種メニュー</div></button>
+
+</div></section>
+
+<section id="cardPage" class="page"><div class="page-title">QR会員証</div><div class="page-description">受付時にスタッフへご提示ください。</div><div class="member-card"><div id="cardType" class="card-type">-</div><div class="qr-shell"><div id="qrcode"></div></div><div class="card-number-label">会員番号</div><div id="cardMemberId" class="card-number">-</div><div id="cardName" class="card-name">-</div><div class="card-exp"><span>有効期限</span><strong id="cardExpiration">-</strong></div></div></section>
+
+<section id="eventPage" class="page"><div class="page-title">イベント</div><div class="page-description">開催予定のイベント情報を確認できます。</div><div id="eventList"><div class="empty-card">読み込み中...</div></div></section>
+
+<section id="newsPage" class="page"><div class="page-title">お知らせ</div><div class="page-description">メテオからの最新情報をご確認いただけます。</div><div id="newsList"><div class="empty-card">読み込み中...</div></div></section>
+
+<section id="menuPage" class="page"><div class="page-title">メニュー</div><div class="page-description">お問い合わせやアプリ情報をご確認いただけます。</div>
+
+<div class="menu-list">
+
+<button class="menu-item" onclick="showPage('contactPage')"><div class="menu-icon">☎</div><div class="menu-text"><div class="menu-title">お問い合わせ</div><div class="menu-sub">電話・店舗情報</div></div><div class="menu-arrow">›</div></button>
+
+<button class="menu-item" onclick="openFacility()"><div class="menu-icon">🌐</div><div class="menu-text"><div class="menu-title">施設案内</div><div class="menu-sub">料金・設備・利用方法</div></div><div class="menu-arrow">›</div></button>
+
+<button class="menu-item" onclick="showPage('termsPage')"><div class="menu-icon">▤</div><div class="menu-text"><div class="menu-title">利用規約</div><div class="menu-sub">サービス利用について</div></div><div class="menu-arrow">›</div></button>
+
+<button class="menu-item" onclick="showPage('privacyPage')"><div class="menu-icon">🔒</div><div class="menu-text"><div class="menu-title">プライバシーポリシー</div><div class="menu-sub">個人情報の取り扱い</div></div><div class="menu-arrow">›</div></button>
+
+<button class="menu-item" onclick="showPage('aboutPage')"><div class="menu-icon">!</div><div class="menu-text"><div class="menu-title">アプリについて</div><div class="menu-sub">METEO MEMBER APP</div></div><div class="menu-arrow">›</div></button>
+
+</div>
+
+<div class="member-info"><div class="info-row"><span class="info-label">会員ID</span><span id="menuMemberId" class="info-value">-</span></div><div class="info-row"><span class="info-label">お名前</span><span id="menuName" class="info-value">-</span></div><div class="info-row"><span class="info-label">会員種別</span><span id="menuType" class="info-value">-</span></div><div class="info-row"><span class="info-label">今月のご来店</span><span id="menuMonthlyVisits" class="info-value">-</span></div><div class="info-row"><span class="info-label">年間ご来店</span><span id="menuYearlyVisits" class="info-value">-</span></div></div><button class="logout" onclick="logout()">ログアウト</button></section>
+
+<section id="contactPage" class="page"><button class="detail-back" onclick="showPage('menuPage')">‹</button><div class="page-title">お問い合わせ</div><div class="page-description">店舗情報・営業時間・お問い合わせ先をご確認いただけます。</div><div class="detail-card"><h2 style="text-align:center;margin-bottom:20px">ネオゴルフステージ メテオ</h2><p style="line-height:2;font-weight:700">〒891-0122<br>鹿児島市南栄1丁目6番1号<br><br><strong>営業時間</strong><br>月・火・水・金・土・日 7:00〜24:00<br>木曜日 9:30〜24:00<br><br><strong>電話番号</strong><br>099-260-7111</p></div><a href="tel:0992607111" class="contact-button primary">お店に電話する</a><a href="https://www\.google.com/maps/search/?api=1&query=ネオゴルフステージ%20メテオ%20鹿児島" target="_blank" rel="noopener noreferrer" class="contact-button secondary">店舗までの地図を見る</a></section>
+
+<section id="termsPage" class="page"><button class="detail-back" onclick="showPage('menuPage')">‹</button><div class="page-title">利用規約</div><div class="legal-card"><h3>第1条（適用）</h3><p>本規約は、ネオゴルフステージ メテオが提供する「METEO公式会員アプリ」の利用条件を定めるものです。</p><h3>第2条（会員証について）</h3><p>本アプリに表示されるQR会員証は、会員本人のみ利用できます。第三者への貸与・譲渡・不正利用は禁止します。</p><h3>第3条（ポイント・特典）</h3><p>ポイント残高および会員特典は、当施設の管理データを基準とします。</p><h3>第4条（イベント・お知らせ）</h3><p>イベント情報や営業時間等は変更となる場合があります。最新情報は本アプリまたは当施設の案内をご確認ください。</p></div></section>
+
+<section id="privacyPage" class="page"><button class="detail-back" onclick="showPage('menuPage')">‹</button><div class="page-title">プライバシーポリシー</div><div class="legal-card"><h3>第1条（取得する情報）</h3><p>当施設は、会員情報、会員番号、会員種別、有効期限、ポイント情報、お問い合わせ内容など、サービス提供に必要な情報を取得・管理します。</p><h3>第2条（利用目的）</h3><p>取得した情報は、会員証の表示、会員確認、ポイント管理、お知らせ・イベント情報の提供、お問い合わせ対応のために利用します。</p><h3>第3条（第三者提供）</h3><p>法令に基づく場合を除き、本人の同意なく個人情報を第三者へ提供することはありません。</p></div></section>
+
+<section id="aboutPage" class="page"><button class="detail-back" onclick="showPage('menuPage')">‹</button><div class="page-title">アプリについて</div><div class="about-card"><img src="logo.png" class="about-logo" alt="METEO"><h2>METEO公式会員アプリ</h2><p>ネオゴルフステージ メテオを<br>より便利にご利用いただくための<br>公式会員アプリです。</p></div></section>
+
+</main>
+
+<nav class="bottom-nav">
+
+<button class="nav-btn active" data-page="homePage" onclick="showPage('homePage')"><span class="nav-icon">⌂</span><span class="nav-text">ホーム</span></button>
+
+<button class="nav-btn" data-page="cardPage" onclick="showPage('cardPage')"><span class="nav-icon">
+
+<svg viewBox="0 0 24 24" aria-hidden="true" style="width:29px;height:29px;fill:currentColor">
+
+  <path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h13A2.5 2.5 0 0 1 21 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 18.5v-13zm2 1V18h14V6H5zm2 2h4v5H7v-5zm6 0h4v2h-4v-2zm0 4h4v2h-4v-2z"/>
+
+</svg>
+
+</span><span class="nav-text">会員証</span></button>
+
+<button class="nav-btn" data-page="eventPage" onclick="showPage('eventPage')"><span class="nav-icon">📅</span><span class="nav-text">イベント</span></button>
+
+<button class="nav-btn" data-page="newsPage" onclick="showPage('newsPage')"><span class="nav-icon">📣</span><span class="nav-text">お知らせ</span></button>
+
+<button class="nav-btn" data-page="menuPage" onclick="showPage('menuPage')"><span class="nav-icon">☰</span><span class="nav-text">メニュー</span></button>
+
+</nav></div></div>
+
+<div id="loading"><div class="spinner"></div><div class="loading-text">読み込み中...</div></div>
+
+<script>
+
+const API_URL="https://script.google.com/macros/s/AKfycbxoQexknbm-lzg76JViCnhA0NXhv5JIXdGqLyzjr6h1p09xByQDFBzSlxzTvjunHhnJ/exec";
+
+let currentMember=null, publicNews=[], publicEvents=[];
+
+window.addEventListener("load",()=>{const id=localStorage.getItem("meteoCustomerMemberId");if(id)loadMember(id,true)});
+
+async function login(){const id=document.getElementById("loginId").value.trim();if(!id)return alert("会員IDを入力してください。");await loadMember(id,false)}
+
+async function loadMember(id,auto){showLoading(true);try{const r=await fetch(`${API_URL}?action=getMember&query=${encodeURIComponent(id)}`);const d=await r.json();if(d.status!=="success"||!d.members?.length){if(!auto)alert("会員情報が見つかりませんでした。");localStorage.removeItem("meteoCustomerMemberId");return}const exact=d.members.find(m=>String(m.memberId)===String(id));if(!exact){if(!auto)alert("正しい会員IDを入力してください。");return}currentMember=exact;localStorage.setItem("meteoCustomerMemberId",exact.memberId);openApp()}catch(e){console.error(e);if(!auto)alert("通信エラーが発生しました。")}finally{showLoading(false)}}
+
+async function openApp(){document.getElementById("loginScreen").style.display="none";document.getElementById("appScreen").style.display="block";renderMember();showPage("homePage");await loadPublicContents()}
+
+function renderMember(){if(!currentMember)return;const m=currentMember,n=m.name||"-",t=m.memberType||"-",e=formatDate(m.expirationDate),p=Number(m.points||0);homeName.innerText=n;homeType.innerText=t;homeExpiration.innerText=e;homePoints.innerText=t==="1年会員"?p.toLocaleString():"0";cardType.innerText=t;cardMemberId.innerText=m.memberId||"-";cardName.innerText=`${n} 様`;cardExpiration.innerText=e;menuMemberId.innerText=m.memberId||"-";menuName.innerText=`${n} 様`;menuType.innerText=t;menuMonthlyVisits.innerText=`${m.monthlyVisits||0} 回`;menuYearlyVisits.innerText=`${m.yearlyVisits||0} 回`;renderQr();renderExpirationAlert()}
+
+function renderQr(){const a=document.getElementById("qrcode");a.innerHTML="";if(!currentMember?.memberId)return;new QRCode(a,{text:String(currentMember.memberId),width:230,height:230,colorDark:"#000",colorLight:"#fff",correctLevel:QRCode.CorrectLevel.H})}
+
+async function loadPublicContents(){try{const [nr,er]=await Promise.all([fetch(`${API_URL}?action=getNews&_=${Date.now()}`),fetch(`${API_URL}?action=getEvents&admin=true&_=${Date.now()}`)]);const [nd,ed]=await Promise.all([nr.json(),er.json()]);publicNews=nd.status==="success"?(nd.news||nd.items||[]):[];publicEvents=ed.status==="success"?(ed.events||ed.items||[]):[];
+
+publicEvents=publicEvents.filter(e=>{
+
+  const status=String(e.status||e.publishStatus||e.publicStatus||"").trim();
+
+  if(status && status!=="公開" && status.toLowerCase()!=="published") return false;
+
+  const raw=e.eventDate||e.date||e.開催日||"";
+
+  if(!raw) return true;
+
+  const d=parseDate(raw);
+
+  if(!d) return true;
+
+  const today=new Date(); today.setHours(0,0,0,0); d.setHours(0,0,0,0);
+
+  return d>=today;
+
+});
+
+renderNews();renderEvents();renderHomeNews();renderHomeEvents()}catch(e){console.error("お知らせ・イベント取得エラー",e);publicNews=[];publicEvents=[];renderNews();renderEvents();renderHomeNews();renderHomeEvents()}}
+
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+
+function renderHomeNews(){const box=document.getElementById("homeNews"),list=document.getElementById("homeNewsList");if(!publicNews.length){box.classList.remove("show");list.innerHTML="";return}box.classList.add("show");const n=publicNews[0];list.innerHTML=`<button class="home-news-card" onclick="showPage('newsPage')"><div class="home-news-date">${esc(formatDate(n.startDate||n.createdAt||""))}</div><div class="home-news-subject">${esc(n.title||"お知らせ")}</div><div class="home-news-more">詳しく見る ›</div></button>`}
+
+function renderHomeEvents(){
+
+  const box=document.getElementById("homeEvents");
+
+  const list=document.getElementById("homeEventList");
+
+  if(!box||!list)return;
+
+  if(!publicEvents.length){
+
+    box.classList.remove("show");
+
+    list.innerHTML="";
+
+    return;
+
+  }
+
+  box.classList.add("show");
+
+  const e=publicEvents[0];
+
+  const title=e.title||e.eventName||e.イベント名||"イベント";
+
+  const date=e.eventDate||e.date||e.開催日||"";
+
+  list.innerHTML=`<button class="home-news-card home-event-card" onclick="showPage('eventPage')">
+
+    <div class="home-news-date">開催日：${esc(formatDate(date))}</div>
+
+    <div class="home-news-subject">${esc(title)}</div>
+
+    <div class="home-news-more">詳しく見る ›</div>
+
+  </button>`;
+
+}
+
+function renderNews(){const a=document.getElementById("newsList");if(!publicNews.length){a.innerHTML='<div class="empty-card">現在お知らせはありません。</div>';return}a.innerHTML=publicNews.map(n=>`<div class="news-card"><div class="news-head"><span class="news-badge">📢 お知らせ</span><div class="news-date">${esc(formatDate(n.startDate||n.createdAt||""))}</div><div class="news-title">${esc(n.title||"お知らせ")}</div></div><div class="news-body">${esc(n.body||"")}</div></div>`).join("")}
+
+function renderEvents(){const a=document.getElementById("eventList");if(!publicEvents.length){a.innerHTML='<div class="empty-card">現在開催予定のイベントはありません。</div>';return}a.innerHTML=publicEvents.map(e=>`<div class="news-card event-card"><div class="news-head"><span class="news-badge">📅 イベント</span><div class="news-date">開催日：${esc(formatDate(e.eventDate||e.date||""))}</div><div class="news-title">${esc(e.title||e.eventName||"イベント")}</div></div><div class="news-body">${esc(e.body||e.content||e.description||e.内容||"")}</div></div>`).join("")}
+
+function renderExpirationAlert(){const a=document.getElementById("expirationAlert");a.innerHTML="";const e=parseDate(currentMember.expirationDate);if(!e)return;const t=new Date();t.setHours(0,0,0,0);e.setHours(0,0,0,0);if(e<t){a.innerHTML='<div class="exp-alert danger">⚠️ 会員有効期限が切れています。店頭スタッフへお問い合わせください。</div>';return}const n=new Date(t);n.setDate(n.getDate()+14);if(e<=n)a.innerHTML=`<div class="exp-alert">📅 会員有効期限が近づいています。有効期限：${formatDate(currentMember.expirationDate)}</div>`}
+
+function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById(id)?.classList.add("active");const details=["contactPage","termsPage","privacyPage","aboutPage"];const nav=details.includes(id)?"menuPage":id;document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===nav));window.scrollTo({top:0,behavior:"smooth"});if(id==="newsPage"||id==="eventPage")loadPublicContents()}
+
+function openFacility(){window.open("https://meteo-sportsplaza.com/golf","_blank","noopener,noreferrer")}
+
+function logout(){if(!confirm("ログアウトしますか？"))return;localStorage.removeItem("meteoCustomerMemberId");currentMember=null;appScreen.style.display="none";loginScreen.style.display="flex";loginId.value=""}
+
+function formatDate(v){if(!v)return"-";return String(v).trim().split("T")[0].split(" ")[0].replace(/-/g,"/")}
+
+function parseDate(v){if(!v)return null;const p=formatDate(v).split("/");if(p.length!==3)return null;const d=new Date(+p[0],+p[1]-1,+p[2]);return Number.isNaN(d.getTime())?null:d}
+
+function showLoading(s){document.getElementById("loading").classList.toggle("show",s)}
+
+</script>
+
+
+<script>
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("./service-worker.js").catch(function (err) {
+      console.error("Service Worker registration failed:", err);
+    });
+  });
+}
+</script>
+
+</body>
+
+</html>
