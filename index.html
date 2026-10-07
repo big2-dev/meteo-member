@@ -834,6 +834,63 @@ body{font-size:20px}
 }
 </style>
 
+
+<style>
+/* ===== スマホ最終可読性調整 ===== */
+.type-pill,.expiration-pill,.shortcut-title,.home-news-title,.home-news-date,
+.home-news-more,.news-badge,.news-date,.menu-title,.menu-sub,.info-label,
+.info-value,.logout,.nav-text,.card-number-label,.card-exp,.contact-button {
+  white-space: nowrap !important;
+}
+
+/* 4ショートカット：1行に収まる最大寄り */
+.shortcut-title{
+  font-size:clamp(16px,4.55vw,20px) !important;
+  letter-spacing:-0.04em;
+  line-height:1.15;
+}
+.shortcut-sub{display:none !important}
+
+/* 下部ナビ */
+.nav-text{
+  font-size:clamp(14px,3.9vw,17px) !important;
+  letter-spacing:-0.04em;
+}
+.nav-item{min-width:0 !important}
+
+/* 会員種別・期限 */
+.type-pill{font-size:clamp(17px,4.7vw,21px) !important}
+.expiration-pill{font-size:clamp(15px,4.15vw,19px) !important}
+.expiration-pill strong{font-size:clamp(17px,4.7vw,21px) !important}
+
+/* メニュー */
+.menu-title{font-size:clamp(19px,5.2vw,23px) !important}
+.menu-sub{font-size:clamp(15px,4.2vw,18px) !important}
+
+/* 日付など短い表示 */
+.home-news-date,.news-date{font-size:clamp(16px,4.4vw,19px) !important}
+
+/* 長文は読みやすく通常折り返し */
+.news-title,.news-body,.page-description,.legal-card p,.about-card p,.detail-card{
+  white-space:normal !important;
+  overflow-wrap:break-word;
+}
+
+/* QR表示領域 */
+#qrCode,#qrcode,.qr-code,.qr-box{
+  min-width:220px;
+  min-height:220px;
+}
+#qrCode img,#qrcode img,.qr-code img,.qr-box img,
+#qrCode canvas,#qrcode canvas,.qr-code canvas,.qr-box canvas{
+  display:block !important;
+  margin:0 auto !important;
+  max-width:220px !important;
+  width:220px !important;
+  height:220px !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -1051,6 +1108,51 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     });
   });
 }
+</script>
+
+
+<script>
+(function(){
+  function memberQrValue(){
+    var candidates = [
+      window.currentMember && (window.currentMember.memberNo || window.currentMember.memberNumber || window.currentMember.id),
+      document.querySelector(".card-number") && document.querySelector(".card-number").textContent
+    ];
+    for (var i=0;i<candidates.length;i++){
+      var v = String(candidates[i] || "").trim();
+      if(v) return v.replace(/\s+/g,"");
+    }
+    return "";
+  }
+
+  window.ensureMeteoQr = function(){
+    var box = document.getElementById("qrCode") || document.getElementById("qrcode") ||
+              document.querySelector(".qr-code") || document.querySelector(".qr-box");
+    if(!box || typeof QRCode === "undefined") return;
+    var value = memberQrValue();
+    if(!value) return;
+    if(box.querySelector("img,canvas")) return;
+    box.innerHTML = "";
+    new QRCode(box,{
+      text:value,
+      width:220,
+      height:220,
+      correctLevel:QRCode.CorrectLevel.M
+    });
+  };
+
+  document.addEventListener("click",function(e){
+    var t=(e.target.closest && e.target.closest("button,a,.shortcut,.nav-item")) || e.target;
+    var s=(t && t.textContent || "");
+    if(s.indexOf("会員証")>=0 || s.indexOf("QR")>=0){
+      setTimeout(window.ensureMeteoQr,150);
+      setTimeout(window.ensureMeteoQr,600);
+    }
+  });
+  window.addEventListener("load",function(){
+    setTimeout(window.ensureMeteoQr,500);
+  });
+})();
 </script>
 
 </body>
